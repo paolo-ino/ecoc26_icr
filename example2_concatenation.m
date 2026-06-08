@@ -83,7 +83,7 @@ xtAvgSingleValueVsDistance_dB = squeeze(10*log10(mean(xtMetrics(selIdx).avgDef1,
 figure, semilogx(xtAvgSingleValueVsDistance_dB), grid on, 
 xlabel('Nr of segments'), ylabel('xt avg (dB)'), title('Segment concatenation')
 
-%% Transfer matrix for a specific coupling strength and orientation, and the avg over orientations
+%% Transfer matrix for a specific coupling strength and realization, and the average over realizations
 xtConcatTarget_dB = -9.52;
 nChosenSecs = round(interp1(xtAvgSingleValueVsDistance_dB, 1:length(xtAvgSingleValueVsDistance_dB), xtConcatTarget_dB));
 
@@ -96,11 +96,11 @@ nexttile, imagesc(abs(M_single_real)), colorbar, title("Single realization: lin 
 nexttile, imagesc(10*log10(abs(M_single_real).^2)), colorbar, title("Single realization: log scale"), xtHelpers.drawGroupLimits(modeIndices); axis square; colormap jet; %clim([-300 0])
 
 % Average
-nexttile, imagesc(squeeze(abs(mean(M_vs_rot, 1)))), colorbar, title('Avg over orientation: lin scale'), xtHelpers.drawGroupLimits(modeIndices); axis square; colormap jet;
-nexttile, imagesc(squeeze(10*log10(mean(abs(M_vs_rot).^2, 1)))), colorbar, title('Avg over orientation: log scale'), xtHelpers.drawGroupLimits(modeIndices); axis square; colormap jet; %clim([-300 0])
+nexttile, imagesc(squeeze(abs(mean(M_vs_rot, 1)))), colorbar, title('Avg over realizations: lin scale'), xtHelpers.drawGroupLimits(modeIndices); axis square; colormap jet;
+nexttile, imagesc(squeeze(10*log10(mean(abs(M_vs_rot).^2, 1)))), colorbar, title('Avg over realizations: log scale'), xtHelpers.drawGroupLimits(modeIndices); axis square; colormap jet; %clim([-300 0])
 title(t, "Coupling matrix")
 
-%% XT: specific coupling strength and orientation
+%% Crosstalk per group
 P_mat_dBm = 10*log10(abs(M_single_real).^2);
 
 figure,
@@ -111,18 +111,18 @@ for xtMetricIdx = 1:length(xtMetricsNames)
         xtInterPerGroupSingleReal_dB = squeeze(10*log10(xtMetrics(xtMetricIdx).perGroup(1,nChosenSecs,:)));
         xtInterPerGroupAvg_dB = squeeze(10*log10(mean(xtMetrics(xtMetricIdx).perGroup(:,nChosenSecs,:), 1)));
         plot(xtInterPerGroupSingleReal_dB, 'x-','DisplayName', "Per group "+ xtMetricName+": single real"), grid on, box on, hold on,
-        plot(xtInterPerGroupAvg_dB, 'x-','DisplayName', "Per group "+ xtMetricName+": avg over real")
+        plot(xtInterPerGroupAvg_dB, 'x-','DisplayName', "Per group "+ xtMetricName+": avg over realizations")
     end
 
     xtAvg1SingleReal_dB = squeeze(10*log10(xtMetrics(xtMetricIdx).avgDef1(1,nChosenSecs)));
     xtAvg1Avg_dB = squeeze(10*log10(mean(xtMetrics(xtMetricIdx).avgDef1(:,nChosenSecs), 1)));
 
     plot(xtAvg1SingleReal_dB*ones(1, nGroups), '--','DisplayName', xtMetricName + " avg per fiber, single real")
-    plot(xtAvg1Avg_dB*ones(1, nGroups), '--','DisplayName', xtMetricName + " avg per fiber, avg over real")
+    plot(xtAvg1Avg_dB*ones(1, nGroups), '--','DisplayName', xtMetricName + " avg per fiber, avg over realizations")
 
 end
-xlabel('Group idx'), ylabel('Inter-group XT (dB)'), legend
-title("Single realization. scaling parameter = "+chObjConcat.targetXtPerSection_dB+" dB")
+xlabel('Group idx'), ylabel('XT (dB)'), legend
+title("Single realization. XT per section = "+ round(chObjConcat.targetXtPerSection_dB*100)/100+" dB")
 
 T_tot_end_rep = squeeze(T_tot(end,:,:,:));
 T_avg_1 = squeeze(mean(abs(T_tot(:, 1, :, :)).^2, 1));
@@ -140,7 +140,7 @@ T_spec_end_seg = abs(squeeze(T_tot_end_rep(nChosenSecs, :, :))).^2;
 title(t, "Transfer matrix: "+nChosenSecs+" sections. Each section with scaling factor "+round(tuningParam)+" dB")
 
 
-%% XT vs distance
+%% Crosstalk vs distance
 colors = lines(10);   % good distinguishable color palette
 markers = {'o','s','d','^','v','>','<','p','h','x'};
 linestyles = {'-','--',':','-.'};
@@ -150,18 +150,18 @@ for xtMetricIdx = 1:length(xtMetricsNames)
     xtMetricName = xtMetricsNames{xtMetricIdx};
     xtAvgVsDistance_dB = squeeze(10*log10(mean(xtMetrics(xtMetricIdx).avgDef1, 1)));
 
-    semilogx(1:length(xtAvgVsDistance_dB), xtAvgVsDistance_dB, "DisplayName", xtMetricName+" avg over real", ...
+    semilogx(1:length(xtAvgVsDistance_dB), xtAvgVsDistance_dB, "DisplayName", xtMetricName+" avg over realizations", ...
     'Color', colors(xtMetricIdx,:), ...
     'Marker', markers{xtMetricIdx}, ...
     'LineStyle', linestyles{mod(xtMetricIdx-1,length(linestyles))+1}), grid on, hold on
 end
 xlabel('Section idx'), ylabel('XT (dB)'), legend
-title("Concatenation:" + chObjConcat.nSec + " sections")
+title("Concatenation: " + chObjConcat.nSec + " sections")
 
 
 
 %% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
-%% Errorbar of average over orientation fixed a coupling strength
+%% Errorbar of average over realizations
 %
 figure,
 for xtMetricIdx = 1:length(xtMetricsNames)
@@ -177,8 +177,8 @@ for xtMetricIdx = 1:length(xtMetricsNames)
         xtHelpers.errorbarLog(1:nGroups, repmat(xtMetrics(xtMetricIdx).avgDef1(:, nChosenSecs).', nGroups, 1), "dB", "plotOptions", {"x-","DisplayName", sprintf("Avg per fiber"+xtMetricName)}), grid on, box on, hold on,
     end
 end
-xlabel('Group idx'), ylabel('Inter-group XT (dB)'), legend
-title("Errorbars over orientation.")
+xlabel('Group idx'), ylabel('XT (dB)'), legend
+title("Errorbars over realizations")
 %
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
 

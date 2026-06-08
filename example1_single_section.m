@@ -15,6 +15,10 @@
 % 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
 
+addpath(genpath("./localLibrary"))
+addpath(genpath("./databases"))
+clearvars
+
 %% Parameters you might want to change
 targetXtPerSec_dB = -20; % [dB] desired value of average fiber crosstalk as in [Carniello26, p.2]
 nGroups = 9; % number of mode groups for a graded-index multimode fiber
@@ -30,9 +34,11 @@ nSec = 1; % number of section of the multisectional model. Keep it to 1, since w
 xtMetricsArray = {"SingleValue", "Ferreira"};
 if variance_style == "exp_perMode"
     a = -2.25;
-    model_parameters = {"a", a}; % parameters of the expm model
+    model_parameters = {"a", a}; % parameters of the expm model    
+    model_parameters_str.a = a;
 else
-    model_parameters = [];
+    model_parameters_str = {};
+    model_parameters = {};
 end
 
 if polFlag
@@ -81,15 +87,33 @@ for xtMetricIdx = 1:length(xtMetricsNames)
 
     if xtMetricName == "Ferreira"
         xtInterPerGroupSingleReal_dB = squeeze(10*log10(xtMetrics(xtMetricIdx).perGroup(chosenRealIdx,chosenSecIdx,:,:)));
-        xtInterPerGroupAvg_dB = squeeze(10*log10(mean(xtMetrics(xtMetricIdx).perGroup(:,chosenSecIdx,:,:), 1)));
-        plot(xtInterPerGroupSingleReal_dB, 'x-','DisplayName', "Per group "+ xtMetricName+": single real"), grid on, box on, hold on,
-        plot(xtInterPerGroupAvg_dB, 'x-','DisplayName', "Per group "+ xtMetricName+": avg over real")
+        plot(xtInterPerGroupSingleReal_dB, 'o-','DisplayName', "Per group "+ xtMetricName+": single real"), grid on, box on, hold on,
     end
 
-    xtAvg1SingleReal_dB = squeeze(10*log10(xtMetrics(xtMetricIdx).avgDef1(chosenRealIdx,chosenSecIdx,:,:)));
-    xtAvg1Avg_dB = squeeze(10*log10(mean(xtMetrics(xtMetricIdx).avgDef1(:,chosenSecIdx,:,:), 1)));
-
-    plot(xtAvg1SingleReal_dB*ones(1, nGroups), '--','DisplayName', xtMetricName + " avg per fiber 1, single real")
-    plot(xtAvg1Avg_dB*ones(1, nGroups), '--','DisplayName', xtMetricName + " avg per fiber 1, avg over real")
+    if xtMetricName == "SingleValue"
+        xtAvg1SingleReal_dB = squeeze(10*log10(xtMetrics(xtMetricIdx).avgDef1(chosenRealIdx,chosenSecIdx,:,:)));
+        plot(xtAvg1SingleReal_dB*ones(1, nGroups), '--','DisplayName', xtMetricName + " avg per fiber 1, single real")
+    end
 end
 xlabel('Group idx'), ylabel('XT (dB)'), legend
+
+
+
+for xtMetricIdx = 1:length(xtMetricsNames)
+    xtMetricName = xtMetricsNames{xtMetricIdx};
+    if xtMetricName == "Ferreira"
+
+        xtCurr = squeeze(xtMetrics(xtMetricIdx).perGroup(:, chosenSecIdx, :));
+        xtHelpers.errorbarLog(1:nGroups, xtCurr.', "dB", "plotOptions", {"x-","DisplayName", sprintf("Per group " +xtMetricName)}), grid on, box on, hold on,
+
+    end
+
+    if xtMetricName == "SingleValue"
+        xtHelpers.errorbarLog(1:nGroups, repmat(xtMetrics(xtMetricIdx).avgDef1(:, chosenSecIdx).', nGroups, 1), "dB", "plotOptions", {"x-","DisplayName", sprintf("Avg per fiber"+xtMetricName)}), grid on, box on, hold on,
+    end
+end
+xlabel('Group idx'), ylabel('Inter-group XT (dB)'), legend
+title("Errorbars over realizations.")
+%
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+

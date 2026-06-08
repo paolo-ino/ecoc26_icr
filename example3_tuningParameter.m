@@ -27,8 +27,8 @@ addpath(genpath("./localLibrary"))
 addpath(genpath("./databases"))
 
 %% Parameters you might want to change
-% nGroupsVec = [3 9];
-nGroupsVec = 2:12;
+nGroupsVec = [3 9];
+% nGroupsVec = 2:12;
 polFlag = 1; % flag to decide if polarizations are considered as well, or only spatial modes
 nRep = 100; % number of Monte Carlo simulations for each point (value of tuning parameter), used to compute the average value of XT
 dBeta0L = 1e4; % product between the difference in propagation constant among consecutive groups and the section length. It can also be regarded as an optimization parameter or fixed it to a "reasonable" value.
@@ -82,8 +82,8 @@ end
 
 %% Plots
 figure, tiledlayout,
-nexttile, plot(tuningParameter_dB_vec, 10*log10(xtSingleValueVec).'), xlabel('target xt inter (dB)'), ylabel('xt inter (dB)'), grid on, lg=legend(string(nGroupsVec)); lg.Title.String = "n groups";
-nexttile, plot(tuningParameter_dB_vec, 10*log10(xtSingleValueVec).'-tuningParameter_dB_vec.'), xlabel('target xt inter (dB)'), ylabel('err (dB)'), grid on, lg=legend(string(nGroupsVec)); lg.Title.String = "n groups";
+nexttile, plot(tuningParameter_dB_vec, 10*log10(xtSingleValueVec).'), xlabel('XT (dB)'), ylabel('XT (dB)'), grid on, lg=legend(string(nGroupsVec)); lg.Title.String = "n groups";
+nexttile, plot(tuningParameter_dB_vec, 10*log10(xtSingleValueVec).'-tuningParameter_dB_vec.'), xlabel('XT (dB)'), ylabel('err (dB)'), grid on, lg=legend(string(nGroupsVec)); lg.Title.String = "n groups";
 
 figure, plot(tuningParamVec, 10*log10(xtSingleValueVec)), grid on, hold on,
 lgnStr = "Numeric: "+nGroupsVec+" groups";
@@ -103,7 +103,7 @@ end
 %% Test: tuning curve with the generated interpolant
 xtVecTest_dB = -80:0.5:0;
 tuningParam_test = zeros(1, length(xtVecTest_dB));
-testnGroups = 12;
+testnGroups = 9;
 for ii = 1:length(xtVecTest_dB)
     tuningParam_test(ii) = interpolants{testnGroups}(xtVecTest_dB(ii));
 end
@@ -170,3 +170,7 @@ concatenationArgs = {"xtMetrics", xtMetricsNames, "nRep", nRep, "singleSectionAr
 [T_tot, xtMetrics] = chObj.concatenationTransferMatrix(concatenationArgs{:});
 
 figure, imagesc(squeeze(10*log10(mean(abs(T_tot).^2, 1)))), colormap jet; colorbar, axis square
+a=colorbar; ylabel(a,'Relative power (dB)','FontSize',16,'Rotation',270);
+xtHelpers.drawGroupLimits(modeIndices);
+xlabel('Input mode index'), ylabel('Output mode index')
+title("Average power transfer matrix")
