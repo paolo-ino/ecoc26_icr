@@ -1,0 +1,32 @@
+# gitignore file that avoids github to keep track of the changes of all the files matching with the patterns below. See the book "Pro Git" to know more about it.
+
+# Default autosave extension
+*.asv
+
+# Packaged app and toolbox files
+*.mlappinstall
+*.mltbx
+
+# Generated helpsearch folders
+helpsearch*/
+
+# Simulink autosave extension
+*.autosave
+
+*.pdf
+
+# ignore .mat files since normally too big
+*.mat
+
+# ignore .png files since normally not needed for the code
+*.png
+
+# ignore .fig files since normally not needed for the code
+*.fig
+
+# Internal list of bugs and todo
+bugs.txt
+notes.txt
+
+# Other exotic files
+*.pptx
