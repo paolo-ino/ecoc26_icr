@@ -10,7 +10,15 @@ where $\mathbf{R}$ is a block diagonal matrix with random unitary blocks uniform
 $$ \mathbf{K}_i = e^{j \mathbf{B}_0 + \Delta \beta \, g(\mathrm{XT}, G) \, (\mathbf{P}_i-\mathbf{P}_i^\dagger)}
 $$ 
 
-where $\mathbf{B}_0$ is the diagonal matrix containing the product between the section length $L$ and the propagation constants $\beta_0^{(n)}$ ($n$ is the mode index) for a graded-index multimode fiber (GIMMF) which are assumed to be constant within a mode group and to differ by $\Delta \beta$ from the neighbouring groups (the term $\Delta \beta \, L$ can also be regarded as an optimization parameter or kept fixed to a certain value, e.g., $10^4$), and $\mathbf{P}_i$ is a matrix whose elements are independent complex Gaussian random variables $P_{ab} \sim \mathcal{CN}(0, h_{A-B}^2)$. 
+where 
+
+$$ \mathbf{B}_0 $$ 
+
+is the diagonal matrix containing the product between the section length $L$ and the propagation constants $\beta_0^{(n)}$ ($n$ is the mode index) for a graded-index multimode fiber (GIMMF) which are assumed to be constant within a mode group and to differ by $\Delta \beta$ from the neighbouring groups (the term $\Delta \beta \, L$ can also be regarded as an optimization parameter or kept fixed to a certain value, e.g., $10^4$), and 
+
+$$ \mathbf{P}_i $$
+
+is a matrix whose elements are independent complex Gaussian random variables $P_{ab} \sim \mathcal{CN}(0, h_{A-B}^2)$. 
 
 In the paper, two choices for $h_{A-B}$ are considered:
 
