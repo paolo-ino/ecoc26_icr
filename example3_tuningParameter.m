@@ -1,4 +1,25 @@
-%% Compute the relation between the tuning parameter of the model and the target XT
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+% 
+% Example script showing how to compute the relation between the tuning
+% parameter of the model and the target XT.
+% 
+% The script has already been run for the cases presented in the paper. The
+% relations have been saved in the folder ./databases/. The script can be
+% rerun for additional cases.
+% To see how to use the numerical relations, check
+% example1_single_section.m or example2_concatenation.m.
+% 
+% 
+% References:
+% 
+% [Carniello26] Carniello et al., "A Simplified Model for Linear Mode Coupling in
+% Multimode Fibers with Experimental Assessment", submitted to ECOC 2026
+% 
+%   Author:      Paolo Carniello
+%   Affiliation: Technical University of Munich
+%   Date:        2026-06-08
+% 
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
 
 clearvars
 
@@ -6,11 +27,11 @@ addpath(genpath("./localLibrary"))
 addpath(genpath("./databases"))
 
 %% Parameters you might want to change
-nGroupsVec = [3 9];
-% nGroupsVec = 2:12;
+% nGroupsVec = [3 9];
+nGroupsVec = 2:12;
 polFlag = 1; % flag to decide if polarizations are considered as well, or only spatial modes
 nRep = 100; % number of Monte Carlo simulations for each point (value of tuning parameter), used to compute the average value of XT
-dBeta0L = 1e4; % product between the difference in propagation constant among consecutive groups and the section length. It can be regarded as an optimization parameter.
+dBeta0L = 1e4; % product between the difference in propagation constant among consecutive groups and the section length. It can also be regarded as an optimization parameter or fixed it to a "reasonable" value.
 tuningParameter_dB_vec = [-80:10:-40 -30:1:-10 -7:3:1 5 10]; % the tuning parameter is the target XT
 igsc = 1; % flag to decide whether intra-group strong coupling is enforced via a block-wise random unitary matrix
 
@@ -22,7 +43,7 @@ tuningParamName = "targetXtPerSection_dB";
 tuningParamVec = tuningParameter_dB_vec;
 
 nSec = 1; % number of section of the multisectional model. Keep it to 1, since we are looking for the relation between tuning parameter and XT for a single segment
-variance_style = "uniform"; % "uniform", "exp_perMode" type of variance
+variance_style = "exp_perMode"; % "uniform", "exp_perMode" type of variance
 xtMetricsArray = {"SingleValue", "Ferreira"};
 if variance_style == "exp_perMode"
     a = -2.25;
@@ -82,7 +103,7 @@ end
 %% Test: tuning curve with the generated interpolant
 xtVecTest_dB = -80:0.5:0;
 tuningParam_test = zeros(1, length(xtVecTest_dB));
-testnGroups = 3;
+testnGroups = 12;
 for ii = 1:length(xtVecTest_dB)
     tuningParam_test(ii) = interpolants{testnGroups}(xtVecTest_dB(ii));
 end
@@ -148,4 +169,4 @@ model_parameters = {}; % parameters of the expm model
 concatenationArgs = {"xtMetrics", xtMetricsNames, "nRep", nRep, "singleSectionArgs", model_parameters};
 [T_tot, xtMetrics] = chObj.concatenationTransferMatrix(concatenationArgs{:});
 
-figure, imagesc(squeeze(10*log10(mean(abs(T_tot), 1)))), colormap jet; colorbar, axis square
+figure, imagesc(squeeze(10*log10(mean(abs(T_tot).^2, 1)))), colormap jet; colorbar, axis square
