@@ -13,10 +13,6 @@ helpsearch*/
 # Simulink autosave extension
 *.autosave
 
-*.pdf
-
-# ignore .mat files since normally too big
-*.mat
 
 # ignore .png files since normally not needed for the code
 *.png
