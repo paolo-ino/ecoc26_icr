@@ -24,7 +24,7 @@ addpath(genpath("./localLibrary"))
 addpath(genpath("./databases"))
 clearvars
 
-%% User-defined parameters
+%% Parameters you might want to change
 variance_style = "uniform"; % "uniform", "exp_perMode" type of variance for HelpersN.misc.randomUnitaryMatrix_xt
 
 nGroups = 9; % number of mode groups
@@ -39,7 +39,7 @@ nRep = 100; % number of Monte Carlo realizations for the concatenation.
 nSec = 100; % number of sections for the multisectional model
 targetXtPerSec_dB = -29.5; % [dB] target XT per section
 
-%% Internal parameters
+%% Parameters you probably don't want to change
 rndStream = RandStream('mrg32k3a', 'Seed', 2);
 
 if variance_style == "exp_perMode"
@@ -71,19 +71,20 @@ ModelConstructorArgs = {beta0s, dBeta0L, igsc, ...
 tuningParam = expmModel.getTuningParameterFromXt(expmModel(ModelConstructorArgs{:}, "model_parameters", model_parameters_str), targetXtPerSec_dB);
 tuningParamName = "targetXtPerSection_dB";
 
+%% Simulations
 chObjConcat = expmModel(ModelConstructorArgs{:}, tuningParamName, tuningParam);
 [T_tot, xtMetrics] = chObjConcat.concatenationTransferMatrix(concatenationArgs{:});
 % T_tot is [nRep, nSec, nModes, nModes]
 % xtMetrics is [nRep, nSec, nModes]
 
-%% PLOTS
+%% Plots: Transfer matrices
 [~, selIdx] = ismember("SingleValue", string(xtMetricsNames));
 xtAvgSingleValueVsDistance_dB = squeeze(10*log10(mean(xtMetrics(selIdx).avgDef1, 1)));
 
 figure, semilogx(xtAvgSingleValueVsDistance_dB), grid on, 
 xlabel('Nr of segments'), ylabel('xt avg (dB)'), title('Segment concatenation')
 
-%% Transfer matrix for a specific coupling strength and realization, and the average over realizations
+%% Plots: Transfer matrix for a specific coupling strength and realization, and the average over realizations
 xtConcatTarget_dB = -9.52;
 nChosenSecs = round(interp1(xtAvgSingleValueVsDistance_dB, 1:length(xtAvgSingleValueVsDistance_dB), xtConcatTarget_dB));
 
@@ -100,7 +101,7 @@ nexttile, imagesc(squeeze(abs(mean(M_vs_rot, 1)))), colorbar, title('Avg over re
 nexttile, imagesc(squeeze(10*log10(mean(abs(M_vs_rot).^2, 1)))), colorbar, title('Avg over realizations: log scale'), xtHelpers.drawGroupLimits(modeIndices); axis square; colormap jet; %clim([-300 0])
 title(t, "Coupling matrix")
 
-%% Crosstalk per group
+%% Plots: Crosstalk per group
 P_mat_dBm = 10*log10(abs(M_single_real).^2);
 
 figure,
@@ -140,7 +141,7 @@ T_spec_end_seg = abs(squeeze(T_tot_end_rep(nChosenSecs, :, :))).^2;
 title(t, "Transfer matrix: "+nChosenSecs+" sections. Each section with scaling factor "+round(tuningParam)+" dB")
 
 
-%% Crosstalk vs distance
+%% Plots: Crosstalk vs distance
 colors = lines(10);   % good distinguishable color palette
 markers = {'o','s','d','^','v','>','<','p','h','x'};
 linestyles = {'-','--',':','-.'};
@@ -159,9 +160,7 @@ xlabel('Section idx'), ylabel('XT (dB)'), legend
 title("Concatenation: " + chObjConcat.nSec + " sections")
 
 
-
-%% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
-%% Errorbar of average over realizations
+%% Plots: Errorbar of average over realizations
 %
 figure,
 for xtMetricIdx = 1:length(xtMetricsNames)
