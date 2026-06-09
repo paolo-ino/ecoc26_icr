@@ -30,17 +30,17 @@ variance_style = "uniform"; % "uniform", "exp_perMode" type of variance for Help
 nGroups = 9; % number of mode groups
 polFlag = 1; % 0: no polarizations, 1: with polarizations. It should be kept to 1.
 igsc = 1; % flag to add intra-group strong coupling regime via a block-diagonal matrix, whose blocks are uniformly-distributed random unitary matrices
-modeIndices = xtHelpers.modeIndicesPGIMMF(nGroups, polFlag);
 
 dBeta0L = 1e4; % product between the difference in propagation constant among consecutive groups and the section length. It can also be regarded as an optimization parameter or fixed it to a "reasonable" value.
 
-xtMetricsNames = {"Ferreira", "SingleValue"}; % XT metrics
 nRep = 100; % number of Monte Carlo realizations for the concatenation.
 nSec = 100; % number of sections for the multisectional model
 targetXtPerSec_dB = -29.5; % [dB] target XT per section
 
 %% Parameters you probably don't want to change
 rndStream = RandStream('mrg32k3a', 'Seed', 2);
+modeIndices = xtHelpers.modeIndicesPGIMMF(nGroups, polFlag);
+xtMetricsNames = {"Ferreira", "SingleValue"}; % XT metrics
 
 if variance_style == "exp_perMode"
     a = -2.25;
