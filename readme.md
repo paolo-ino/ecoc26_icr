@@ -22,7 +22,11 @@ is a matrix whose elements are independent complex Gaussian random variables $P_
 
 In the paper, two choices for $h_{A-B}$ are considered:
 
-1) $h_{A-B} = 1$, i.e., same variance for all coupling coefficients. We call this the "uniform" choice. For $\mathrm{XT} \le -5\,\mathrm{dB}$, an approximate expression for $g$ is $$ g(\mathrm{XT}, G) \approx \sqrt{\frac{\mathrm{XT}_t - 0.91 + 0.31G}{2M}}$$ where $\mathrm{XT}_t$ is the target crosstalk; 
+1) $h_{A-B} = 1$, i.e., same variance for all coupling coefficients. We call this the "uniform" choice. For $\mathrm{XT} \le -5\,\mathrm{dB}$, an approximate expression for $g$ is
+
+ $$ g(\mathrm{XT}, G) \approx \sqrt{\frac{\mathrm{XT}_t - 0.91 + 0.31G}{2M}} $$ 
+ 
+   where $\mathrm{XT}_t$ is the target crosstalk; 
 
 2) $h_{A-B} = e^{-2.25|A-B|}$. We call this the non-uniform choice. We don't provide an approximate expression for $g$ in this case, but rather a numerical one (see the first dataset listed in the Datasets section below) for $\mathrm{XT} \in [-80, 0] \, \mathrm{dB}$ and $G = 2, 3, \dots, 12$.
 
