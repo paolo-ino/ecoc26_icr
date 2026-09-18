@@ -1,5 +1,5 @@
 # A Simplified Model for Linear Mode Coupling in Multimode Fibers
-This repo contains the code for the submission "A Simplified Model for Linear Mode Coupling in Multimode Fibers" to the 2026 European Conference on Optical Communications.
+This repo contains the code for the submission "A Simplified Model for Linear Mode Coupling in Multimode Fibers with Experimental Assessment" to the 2026 European Conference on Optical Communications.
 
 Two multisectional models with the following transfer matrix for the $i$-th section are considered:
 
@@ -53,6 +53,21 @@ Other multisectional models can be implemented as subclasses of `MultiSectionalM
 Tested on MATLAB R2025b.
 
 ## Citation
-A BibTeX entry will be added if the paper is accepted. For the moment, the following can be used:
+The paper has been accepted at the 2026 European Conference on Optical Communications (ECOC). A preprint is available on arXiv: [arXiv:2609.20617](https://arxiv.org/abs/2609.20617).
 
-P. Carniello, F. M. Ferreira, F. A. Barbosa, M. J. Li, N. Hanik, "A Simplified Model for Linear Mode Coupling in Multimode Fibers", submitted to 2026 European Conference on Optical Communications (ECOC), 2026
+If you use this code, please cite:
+
+P. Carniello, F. M. Ferreira, F. A. Barbosa, M.-J. Li, N. Hanik, "A Simplified Model for Linear Mode Coupling in Multimode Fibers with Experimental Assessment", accepted at the 2026 European Conference on Optical Communications (ECOC), 2026. arXiv:2609.20617
+
+```bibtex
+@misc{carniello2026simplifiedmodellinearmode,
+      title={A Simplified Model for Linear Mode Coupling in Multimode Fibers with Experimental Assessment},
+      author={Paolo Carniello and Filipe M. Ferreira and Fabio A. Barbosa and Ming-Jun Li and Norbert Hanik},
+      year={2026},
+      eprint={2609.20617},
+      archivePrefix={arXiv},
+      primaryClass={physics.optics},
+      url={https://arxiv.org/abs/2609.20617},
+      note={Accepted at the 2026 European Conference on Optical Communications (ECOC)},
+}
+```

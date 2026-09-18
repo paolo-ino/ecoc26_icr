@@ -1,0 +1,39 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite the paper below."
+title: "A Simplified Model for Linear Mode Coupling in Multimode Fibers"
+abstract: "MATLAB code for the multisectional linear mode coupling models presented in the accompanying ECOC 2026 paper."
+type: software
+authors:
+  - given-names: Paolo
+    family-names: Carniello
+  - given-names: "Filipe M."
+    family-names: Ferreira
+  - given-names: "Fabio A."
+    family-names: Barbosa
+  - given-names: Ming-Jun
+    family-names: Li
+  - given-names: Norbert
+    family-names: Hanik
+repository-code: "https://github.com/paolo-ino/ecoc26_icr"
+license: MIT
+preferred-citation:
+  type: generic
+  title: "A Simplified Model for Linear Mode Coupling in Multimode Fibers with Experimental Assessment"
+  authors:
+    - given-names: Paolo
+      family-names: Carniello
+    - given-names: "Filipe M."
+      family-names: Ferreira
+    - given-names: "Fabio A."
+      family-names: Barbosa
+    - given-names: Ming-Jun
+      family-names: Li
+    - given-names: Norbert
+      family-names: Hanik
+  year: 2026
+  identifiers:
+    - type: other
+      value: "arXiv:2609.20617"
+      description: "arXiv preprint"
+  url: "https://arxiv.org/abs/2609.20617"
+  notes: "Accepted at the 2026 European Conference on Optical Communications (ECOC)"
