@@ -28,7 +28,7 @@ In the paper, two choices for $h_{A-B}$ are considered:
  
    where $\mathrm{XT}_t$ is the target crosstalk; 
 
-2) $h_{A-B} = e^{-2.25|A-B|}$. We call this the non-uniform choice. We don't provide an approximate expression for $g$ in this case, but rather a numerical one (see the first dataset listed in the Datasets section below) for $\mathrm{XT} \in [-80, 0] \, \mathrm{dB}$ and $G = 2, 3, \dots, 12$.
+2) $h_{A-B} = e^{-2.25|A-B|}$. We call this the non-uniform choice. We don't provide an approximate analytic relation for $g$ in this case, but rather a numerical one (see the first dataset listed in the Datasets section below) for $\mathrm{XT} \in [-80, 0] \, \mathrm{dB}$ and $G = 2, 3, \dots, 12$.
 
 The models and the code are for a frequency-independent channel, the inclusion of frequency-dependence effects is immediate and explained in the paper.
 
